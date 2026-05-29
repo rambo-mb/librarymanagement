@@ -63,7 +63,7 @@ public class BookService : IBookService
 
 		foreach(Book book in books)
 		{
-			if(book.Author == author) result.Add(book);
+			if(book.Author.ToLower() == author.ToLower()) result.Add(book);
 		}
 
 		return result.ToArray();

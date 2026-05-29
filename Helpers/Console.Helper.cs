@@ -11,8 +11,10 @@ public static class ConsoleHelpers
 
 		do
 		{
-			Console.Write($"Enter {name}:");
+			Console.Write($"Enter {name}: ");
 			string userInput = Console.ReadLine().Trim();
+
+			if(userInput == "0" || userInput.ToLower() == "q") return 0;
 
 			isValid = int.TryParse(userInput, out result) && result > 0;
 
@@ -30,8 +32,10 @@ public static class ConsoleHelpers
 
 		do
 		{
-			Console.Write($"Enter {name}:");
+			Console.Write($"Enter {name}: ");
 			string userInput = Console.ReadLine().Trim();
+
+			if(userInput == "0" || userInput.ToLower() == "q") return null;
 
 			if(string.IsNullOrWhiteSpace(userInput))
 			{
@@ -67,12 +71,14 @@ public static class ConsoleHelpers
 
 	public static void PrintSuccess(string message)
 	{
+		Console.WriteLine();
 		Console.ForegroundColor = ConsoleColor.Green;
 		Console.WriteLine($"{message}");
 		Console.ResetColor();
 	}
 	public static void PrintError(string message)
 	{
+		Console.WriteLine();
 		Console.ForegroundColor = ConsoleColor.Red;
 		Console.WriteLine($"{message}");
 		Console.ResetColor();
@@ -85,9 +91,10 @@ public static class ConsoleHelpers
 	}
 
 	public static void PrintWarning(string message)
-{
+	{
+		Console.WriteLine();
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine(message);
     Console.ResetColor();
-}
+	}
 }

@@ -59,6 +59,7 @@ public class App
 	private void HandleSearchByAuthor()
 	{
 		string author = ConsoleHelpers.ValidateString("author");
+		if(author is null) return;
 
 		Book[] books = _service.SearchByAuthor(author);
 
@@ -69,7 +70,7 @@ public class App
 			return;
 		}
 
-		Console.WriteLine("Search results: ");
+		Console.WriteLine("\nSearch results: ");
 		foreach(Book book in books)
 		{
 			ConsoleHelpers.PrintBook(book);
@@ -82,6 +83,7 @@ public class App
 	{
 		Book[] books = _service.GetAllBooks();
 		int id = ConsoleHelpers.ValidateInt("book ID");
+		if(id == 0) return;
 
 		foreach(Book book in books)
 		{
@@ -112,6 +114,7 @@ public class App
 	{
 		Book[] books = _service.GetAllBooks();
 		int id = ConsoleHelpers.ValidateInt("book ID");
+		if(id == 0) return;
 
 		foreach(Book book in books)
 		{
@@ -141,10 +144,15 @@ public class App
 	private void HandleCreateBook()
 	{
 
-		Console.WriteLine("Create new book");
+		Console.WriteLine("\nCreate new book");
 		string title = ConsoleHelpers.ValidateString("book title");
+		if(title is null) return;
+
 		string author = ConsoleHelpers.ValidateString("book author");
+		if(author is null) return;
+
 		int year = ConsoleHelpers.ValidateInt("book year");
+		if(year == 0) return;
 
 		Book book = new Book()
 		{
@@ -169,6 +177,7 @@ public class App
 			return;
 		}
 
+		Console.WriteLine();
 		foreach(Book book in books)
 		{
 			ConsoleHelpers.PrintBook(book);
