@@ -25,6 +25,7 @@ public class BookService : IBookService
 	public void CreateBook(Book book)
 	{
 		book.Id = _nextId++;
+		book.IsAvailable = true;
 		books.Add(book);
 	}
 
@@ -53,5 +54,18 @@ public class BookService : IBookService
 		
 		if(book.IsAvailable == false) book.IsAvailable = true;
 		else Console.WriteLine("Book is already returned");
+	}
+
+	public Book[] SearchByAuthor(string author)
+	{
+		Book[] books = GetAllBooks();
+		List<Book> result = new List<Book>();
+
+		foreach(Book book in books)
+		{
+			if(book.Author == author) result.Add(book);
+		}
+
+		return result.ToArray();
 	}
 }

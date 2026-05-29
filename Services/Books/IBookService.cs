@@ -13,4 +13,6 @@ public interface IBookService
 	void BorrowBook(int id);
 
 	void ReturnBook(int id);
+
+	Book[] SearchByAuthor(string author);
 }
