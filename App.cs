@@ -1,5 +1,6 @@
 using LibraryManagement.Models.Books;
 using LibraryManagement.Services.Books;
+using LibraryManagement.Helpers;
 
 namespace LibraryManagement;
 
@@ -48,7 +49,8 @@ public class App
 				case "0":
 					return;
 				default:
-					Console.WriteLine("Invalid option, try again later");
+					ConsoleHelpers.PrintError("Invalid option, try again later");
+					ConsoleHelpers.PrintContinue();
 					break;
 			}
 		}		
@@ -56,38 +58,30 @@ public class App
 
 	private void HandleSearchByAuthor()
 	{
-		string author = ValidateString("author");
+		string author = ConsoleHelpers.ValidateString("author");
 
 		Book[] books = _service.SearchByAuthor(author);
 
 		if(books.Length == 0)
 		{
-			Console.WriteLine("No books found by this author");
+			ConsoleHelpers.PrintWarning("No books found by this author");
+			ConsoleHelpers.PrintContinue();
 			return;
 		}
 
 		Console.WriteLine("Search results: ");
 		foreach(Book book in books)
 		{
-			string status = book.IsAvailable ? "Available" : "Borrowed";
-			Console.WriteLine(
-				$"""
-				Book {book.Id} info
-				--------------------
-				Title: {book.Title}
-				Author: {book.Author}
-				Year: {book.Year}
-				Status: {status}
-				
-				"""
-			);
+			ConsoleHelpers.PrintBook(book);
 		}
+
+		ConsoleHelpers.PrintContinue();
 	}
 
 	private void HandleReturnBook()
 	{
 		Book[] books = _service.GetAllBooks();
-		int id = ValidateInt("book ID");
+		int id = ConsoleHelpers.ValidateInt("book ID");
 
 		foreach(Book book in books)
 		{
@@ -96,24 +90,28 @@ public class App
 				if(book.IsAvailable == false)
 				{
 					_service.ReturnBook(id);
-					Console.WriteLine("Book returned successfully");
+					ConsoleHelpers.PrintSuccess("Book returned successfully");
+					ConsoleHelpers.PrintContinue();
 					return;
 				}
 				else
 				{
-					Console.WriteLine("Book is already returned");
+					ConsoleHelpers.PrintWarning("Book is already returned");
+					ConsoleHelpers.PrintContinue();
 					return;
 				}
 			}
 		}
 
-		Console.WriteLine("Book with this ID not found");
+		ConsoleHelpers.PrintWarning("Book with this ID not found");
+
+		ConsoleHelpers.PrintContinue();
 	}
 
 	private void HandleBorrowBook()
 	{
 		Book[] books = _service.GetAllBooks();
-		int id = ValidateInt("book ID");
+		int id = ConsoleHelpers.ValidateInt("book ID");
 
 		foreach(Book book in books)
 		{
@@ -122,27 +120,31 @@ public class App
 				if(book.IsAvailable == true)
 				{
 					_service.BorrowBook(id);
-					Console.WriteLine("Book borrowed successfully");
+					ConsoleHelpers.PrintSuccess("Book borrowed successfully");
+					ConsoleHelpers.PrintContinue();
 					return;
 				}
 				else
 				{
-					Console.WriteLine("Book is already borrowed");
+					ConsoleHelpers.PrintWarning("Book is already borrowed");
+					ConsoleHelpers.PrintContinue();
 					return;
 				}
 			}
 		}
 
-		Console.WriteLine("Book with this ID not found");
+		ConsoleHelpers.PrintWarning("Book with this ID not found");
+
+		ConsoleHelpers.PrintContinue();
 	}
 
 	private void HandleCreateBook()
 	{
 
 		Console.WriteLine("Create new book");
-		string title = ValidateString("book title");
-		string author = ValidateString("book author");
-		int year = ValidateInt("book year");
+		string title = ConsoleHelpers.ValidateString("book title");
+		string author = ConsoleHelpers.ValidateString("book author");
+		int year = ConsoleHelpers.ValidateInt("book year");
 
 		Book book = new Book()
 		{
@@ -152,30 +154,8 @@ public class App
 		};
 
 		_service.CreateBook(book);
-	}
-
-	private int ValidateInt(string name)
-	{
-		int result;
-		bool isValid = true;
-
-		do
-		{
-			Console.Write($"Enter {name}:");
-			string userInput = Console.ReadLine().Trim();
-
-			isValid = int.TryParse(userInput, out result) && result > 0;
-
-			if(!isValid)
-			{
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine($"Field {name} is not valid");
-				Console.ResetColor();
-			}
-
-		} while(!isValid);
-
-		return result;
+		ConsoleHelpers.PrintSuccess("Book created successfully");
+		ConsoleHelpers.PrintContinue();
 	}
 
 	private void HandleShowAllBooks()
@@ -184,52 +164,16 @@ public class App
 
 		if(books.Length == 0) 
 		{
-			Console.WriteLine("No books found");
+			ConsoleHelpers.PrintWarning("No books found");
+			ConsoleHelpers.PrintContinue();
 			return;
 		}
 
 		foreach(Book book in books)
 		{
-			string status = book.IsAvailable ? "Available" : "Borrowed";
-			Console.WriteLine(
-				$"""
-				Book {book.Id} info
-				--------------------
-				Title: {book.Title}
-				Author: {book.Author}
-				Year: {book.Year}
-				Status: {status}
-				
-				"""
-			);
+			ConsoleHelpers.PrintBook(book);
 		}
-	}
 
-	private string ValidateString(string name)
-	{
-		string result = string.Empty;
-		bool isValid = true;
-
-		do
-		{
-			Console.Write($"Enter {name}:");
-			string userInput = Console.ReadLine().Trim();
-
-			if(string.IsNullOrWhiteSpace(userInput))
-			{
-				isValid = false;
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine($"Field {name} is not valid");
-				Console.ResetColor();
-			}
-			else
-			{
-				result = userInput;
-				isValid = true;
-			}
-			
-		} while(!isValid);
-		
-		return result;
+		ConsoleHelpers.PrintContinue();
 	}
 }
