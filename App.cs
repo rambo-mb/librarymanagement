@@ -71,7 +71,7 @@ public class App
 
         Book book = _service.GetBookById(id);
 
-        if(book is null)
+        if (book is null)
         {
             ConsoleHelpers.PrintWarning("Book with this ID not found");
             ConsoleHelpers.PrintContinue();
@@ -132,7 +132,7 @@ public class App
 
         List<Book> books = _service.SearchByAuthor(author);
 
-        if (books.Capacity == 0)
+        if (books.Count == 0)
         {
             ConsoleHelpers.PrintWarning("No books found by this author");
             ConsoleHelpers.PrintContinue();
@@ -239,7 +239,7 @@ public class App
     {
         List<Book> books = _service.GetAllBooks();
 
-        if (books.Capacity == 0)
+        if (books.Count == 0)
         {
             ConsoleHelpers.PrintWarning("No books found");
             ConsoleHelpers.PrintContinue();

@@ -5,7 +5,7 @@ namespace LibraryManagement.Services.Books;
 
 public class BookService : IBookService
 {
-    private int _nextId = 1;
+    private int _nextId { get; set; }
 
     private readonly string _filePath = "books.json";
 
@@ -14,6 +14,11 @@ public class BookService : IBookService
     public BookService()
     {
         books = LoadBooks();
+
+        if (books.Count == 0)
+            _nextId = 1;
+        else
+            _nextId = books[books.Count - 1].Id + 1;
     }
 
     public void BorrowBook(int id)
