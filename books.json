@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "Title": "1",
+    "Author": "2",
+    "Year": 3,
+    "IsAvailable": true
+  },
+  {
+    "Id": 2,
+    "Title": "7",
+    "Author": "8",
+    "Year": 9,
+    "IsAvailable": true
+  }
+]

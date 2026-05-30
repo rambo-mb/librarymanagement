@@ -1,71 +1,107 @@
 using LibraryManagement.Models.Books;
+using System.Text.Json;
 
 namespace LibraryManagement.Services.Books;
 
 public class BookService : IBookService
 {
-	private int _nextId = 1;
+    private int _nextId = 1;
 
-	private List<Book> books = new List<Book>();
+    private readonly string _filePath = "books.json";
 
-	public void BorrowBook(int id)
-	{
-		Book book = GetBookById(id);
+    private List<Book> books { get; set; }
 
-		if(book is null) 
-		{
-			Console.WriteLine("Book by this ID not found");
-			return;
-		}
+    public BookService()
+    {
+        books = LoadBooks();
+    }
 
-		if(book.IsAvailable == true) book.IsAvailable = false;
-		else Console.WriteLine("Book is already borrowed");
-	}
+    public void BorrowBook(int id)
+    {
+        Book book = GetBookById(id);
 
-	public void CreateBook(Book book)
-	{
-		book.Id = _nextId++;
-		book.IsAvailable = true;
-		books.Add(book);
-	}
+        if (book is null)
+        {
+            return;
+        }
 
-	public Book[] GetAllBooks()
-	{
-		return books.ToArray();
-	}
+        if (book.IsAvailable == true)
+        {
+            book.IsAvailable = false;
+            SaveBooks(books);
+        }
+    }
 
-	public Book GetBookById(int id)
-	{
-		foreach(Book book in books)
-			if(book.Id == id) return book;
-		
-		return null;
-	}
+    public void CreateBook(Book book)
+    {
+        book.Id = _nextId++;
+        book.IsAvailable = true;
+        books.Add(book);
+        SaveBooks(books);
+    }
 
-	public void ReturnBook(int id)
-	{
-		Book book = GetBookById(id);
+    public List<Book> GetAllBooks()
+    {
+        return books;
+    }
 
-		if(book is null) 
-		{
-			Console.WriteLine("Book by this ID not found");
-			return;
-		}
-		
-		if(book.IsAvailable == false) book.IsAvailable = true;
-		else Console.WriteLine("Book is already returned");
-	}
+    public Book GetBookById(int id)
+    {
+        foreach (Book book in books)
+            if (book.Id == id) return book;
 
-	public Book[] SearchByAuthor(string author)
-	{
-		Book[] books = GetAllBooks();
-		List<Book> result = new List<Book>();
+        return null;
+    }
 
-		foreach(Book book in books)
-		{
-			if(book.Author.ToLower() == author.ToLower()) result.Add(book);
-		}
+    public void ReturnBook(int id)
+    {
+        Book book = GetBookById(id);
 
-		return result.ToArray();
-	}
+        if (book is null)
+        {
+            return;
+        }
+
+        if (book.IsAvailable == false)
+        {
+            book.IsAvailable = true;
+            SaveBooks(books);
+        }
+    }
+
+    public List<Book> SearchByAuthor(string author)
+    {
+        List<Book> books = GetAllBooks();
+        List<Book> result = new List<Book>();
+
+        foreach (Book book in books)
+        {
+            if (book.Author.ToLower().Contains(author.ToLower())) result.Add(book);
+        }
+
+        return result;
+    }
+
+    private List<Book> LoadBooks()
+    {
+        if (!File.Exists(_filePath))
+            return new List<Book>();
+
+        var booksJson = File.ReadAllText(_filePath);
+
+        List<Book> books = JsonSerializer.Deserialize<List<Book>>(booksJson);
+
+        return books ?? new List<Book>();
+    }
+
+    private void SaveBooks(List<Book> books)
+    {
+        var options = new JsonSerializerOptions();
+
+        options.WriteIndented = true;
+
+        string jsonString = JsonSerializer.Serialize<List<Book>>(books, options);
+
+        File.WriteAllText(_filePath, jsonString);
+    }
 }

@@ -4,15 +4,15 @@ namespace LibraryManagement.Services.Books;
 
 public interface IBookService
 {
-	void CreateBook(Book book);
+    void CreateBook(Book book);
 
-	Book[] GetAllBooks();
+    List<Book> GetAllBooks();
 
-	Book GetBookById(int id);
+    Book GetBookById(int id);
 
-	void BorrowBook(int id);
+    void BorrowBook(int id);
 
-	void ReturnBook(int id);
+    void ReturnBook(int id);
 
-	Book[] SearchByAuthor(string author);
+    List<Book> SearchByAuthor(string author);
 }

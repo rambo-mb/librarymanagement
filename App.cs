@@ -62,9 +62,9 @@ public class App
         string author = ConsoleHelpers.ValidateString("author");
         if (author is null) return;
 
-        Book[] books = _service.SearchByAuthor(author);
+        List<Book> books = _service.SearchByAuthor(author);
 
-        if (books.Length == 0)
+        if (books.Capacity == 0)
         {
             ConsoleHelpers.PrintWarning("No books found by this author");
             ConsoleHelpers.PrintContinue();
@@ -82,7 +82,7 @@ public class App
 
     private void HandleReturnBook()
     {
-        Book[] books = _service.GetAllBooks();
+        List<Book> books = _service.GetAllBooks();
         int id = ConsoleHelpers.ValidateInt("book ID");
         if (id == 0) return;
 
@@ -113,7 +113,7 @@ public class App
 
     private void HandleBorrowBook()
     {
-        Book[] books = _service.GetAllBooks();
+        List<Book> books = _service.GetAllBooks();
         int id = ConsoleHelpers.ValidateInt("book ID");
         if (id == 0) return;
 
@@ -169,9 +169,9 @@ public class App
 
     private void HandleShowAllBooks()
     {
-        Book[] books = _service.GetAllBooks();
+        List<Book> books = _service.GetAllBooks();
 
-        if (books.Length == 0)
+        if (books.Capacity == 0)
         {
             ConsoleHelpers.PrintWarning("No books found");
             ConsoleHelpers.PrintContinue();
