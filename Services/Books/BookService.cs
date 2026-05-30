@@ -104,4 +104,28 @@ public class BookService : IBookService
 
         File.WriteAllText(_filePath, jsonString);
     }
+
+    public void UpdateBook(Book newBook)
+    {
+        Book book = GetBookById(newBook.Id);
+
+        if (book is null) return;
+
+        book.Author = newBook.Author;
+        book.Title = newBook.Title;
+        book.Year = newBook.Year;
+
+        SaveBooks(books);
+    }
+
+    public void DeleteBook(int id)
+    {
+        Book book = GetBookById(id);
+
+        if (book is null) return;
+
+        books.Remove(book);
+
+        SaveBooks(books);
+    }
 }

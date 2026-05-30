@@ -1,16 +1,16 @@
 [
   {
     "Id": 1,
-    "Title": "1",
-    "Author": "2",
-    "Year": 3,
+    "Title": "Game of thrones",
+    "Author": "Robert Martin",
+    "Year": 2000,
     "IsAvailable": true
   },
   {
-    "Id": 2,
-    "Title": "7",
-    "Author": "8",
-    "Year": 9,
+    "Id": 1,
+    "Title": "Salom",
+    "Author": "Izzatjon",
+    "Year": 2025,
     "IsAvailable": true
   }
 ]

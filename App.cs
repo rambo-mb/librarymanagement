@@ -24,6 +24,8 @@ public class App
             Console.WriteLine("3. Borrow book");
             Console.WriteLine("4. Return book");
             Console.WriteLine("5. Search by author");
+            Console.WriteLine("6. Update by ID");
+            Console.WriteLine("7. Delete by ID");
             Console.WriteLine("0. Exit");
             Console.Write("\nChoose an option: ");
 
@@ -46,6 +48,12 @@ public class App
                 case "5":
                     HandleSearchByAuthor();
                     break;
+                case "6":
+                    HandleUpdateBookById();
+                    break;
+                case "7":
+                    HandleDeleteById();
+                    break;
                 case "0":
                     return;
                 default:
@@ -54,6 +62,66 @@ public class App
                     break;
             }
         }
+    }
+
+    private void HandleDeleteById()
+    {
+        int id = ConsoleHelpers.ValidateInt("book ID");
+        if (id == 0) return;
+
+        Book book = _service.GetBookById(id);
+
+        if(book is null)
+        {
+            ConsoleHelpers.PrintWarning("Book with this ID not found");
+            ConsoleHelpers.PrintContinue();
+            return;
+        }
+
+        _service.DeleteBook(id);
+        ConsoleHelpers.PrintSuccess("Book deleted successfully");
+        ConsoleHelpers.PrintContinue();
+        return;
+    }
+
+    private void HandleUpdateBookById()
+    {
+        List<Book> books = _service.GetAllBooks();
+        int id = ConsoleHelpers.ValidateInt("book ID");
+        if (id == 0) return;
+
+        foreach (Book book in books)
+        {
+            if (book.Id == id)
+            {
+                Console.WriteLine("\nUpdate book");
+                string title = ConsoleHelpers.ValidateString("book title");
+                if (title is null) return;
+
+                string author = ConsoleHelpers.ValidateString("book author");
+                if (author is null) return;
+
+                int year = ConsoleHelpers.ValidateInt("book year");
+                if (year == 0) return;
+
+                Book newBook = new Book()
+                {
+                    Id = book.Id,
+                    Title = title,
+                    Author = author,
+                    Year = year
+                };
+
+                _service.UpdateBook(newBook);
+                ConsoleHelpers.PrintSuccess("Book updated successfully");
+                ConsoleHelpers.PrintContinue();
+                return;
+            }
+        }
+
+        ConsoleHelpers.PrintWarning("Book with this ID not found");
+
+        ConsoleHelpers.PrintContinue();
     }
 
     private void HandleSearchByAuthor()

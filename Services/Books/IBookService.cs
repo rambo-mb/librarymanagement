@@ -15,4 +15,8 @@ public interface IBookService
     void ReturnBook(int id);
 
     List<Book> SearchByAuthor(string author);
+
+    void UpdateBook(Book book);
+
+    void DeleteBook(int id);
 }
